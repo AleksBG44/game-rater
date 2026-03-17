@@ -101,7 +101,7 @@ function addGame() {
   const vibe = Number(document.getElementById("vibe")?.value || 0);
   const replay = Number(document.getElementById("replay")?.value || 0);
 
-  const total = graphics + gameplay + story + visual + vibe + replay;
+  const total = Math.round(((graphics + gameplay + story + visual + vibe + replay) / 50)*90);
 
   if (!name) {
     alert("Введите название игры.");
