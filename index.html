@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Оценщик</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="site.js" defer></script>
+</head>
+<body>
+  <div class="app-layout">
+
+    <aside class="sidebar">
+      <div class="sidebar-logo">Рейтинатор 1.0 🎮</div>
+
+      <button class="sidebar-btn active" onclick="window.location.href='index.html'">
+        Оценка
+      </button>
+
+      <button class="sidebar-btn" onclick="window.location.href='games.html'">
+        Игры
+      </button>
+    </aside>
+
+    <main class="main-content">
+      <section id="ratingSection" class="content-section">
+        <div class="app-shell">
+          <div class="panel">
+            <div class="top-box">
+              <div class="cover">🎮</div>
+
+              <div class="track-info">
+                <div class="field">
+                  <label for="gameName">Название игры</label>
+                  <input type="text" id="gameName">
+                </div>
+
+                <div class="field">
+                  <label for="gameStudio">Студия / Разработчик</label>
+                  <input type="text" id="gameStudio">
+                </div>
+
+                <div class="field">
+                  <label for="gameComment">Комментарий</label>
+                  <textarea id="gameComment" rows="3"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="sliders-grid">
+              <div class="slider-card purple">
+                <div class="slider-row">
+                  <div class="slider-head">
+                    <span>Графика</span>
+                    <span id="graphicsValue">10</span>
+                  </div>
+                  <input class="blue" type="range" id="graphics" min="0" max="10" value="5">
+                </div>
+
+                <div class="slider-row">
+                  <div class="slider-head">
+                    <span>Геймплей</span>
+                    <span id="gameplayValue">10</span>
+                  </div>
+                  <input class="blue" type="range" id="gameplay" min="0" max="10" value="5">
+                </div>
+              </div>
+
+              <div class="slider-card purple">
+                <div class="slider-row">
+                  <div class="slider-head">
+                    <span>Сюжет</span>
+                    <span id="storyValue">10</span>
+                  </div>
+                  <input class="blue" type="range" id="story" min="0" max="10" value="5">
+                </div>  
+
+                <div class="slider-row">
+                  <div class="slider-head">
+                    <span>Визуал / Арт стиль</span>
+                    <span id="visualValue">10</span>
+                  </div>
+                  <input class="blue" type="range" id="visual" min="0" max="10" value="5">
+                </div>
+              </div>
+
+              <div class="slider-card magenta">
+                <div class="slider-row">
+                  <div class="slider-head">
+                    <span>Атмосфера / Вайб</span>
+                    <span id="vibeValue">5</span>
+                  </div>
+                  <input class="violet" type="range" id="vibe" min="0" max="5" value="3">
+                </div>
+              </div>
+
+              <div class="slider-card pink">
+                <div class="slider-row">
+                  <div class="slider-head">
+                    <span>Играбельность</span>
+                    <span id="replayValue">5</span>
+                  </div>
+                  <input class="pink" type="range" id="replay" min="0" max="5" value="3">
+                </div>
+              </div>
+            </div>
+
+            <div class="bottom-box">
+              <div>
+                <div class="score-wrap">
+                  <div class="score-main">
+                    <div class="score-value" id="totalScore">45</div>
+                    <div class="score-max">/90</div>
+                  </div>
+                </div>
+
+                <div class="mini-values">
+                  <span class="blue-num" id="miniGraphics">10</span>
+                  <span class="blue-num" id="miniGameplay">10</span>
+                  <span class="blue-num" id="miniStory">10</span>
+                  <span class="blue-num" id="miniVisual">10</span>
+                  <span class="violet-num" id="miniVibe">5</span>
+                  <span class="pink-num" id="miniReplay">5</span>
+                </div>
+              </div>
+
+
+              <div class="actions">
+                <button class="save-btn" onclick="addGame()">Сохранить</button>
+                <button class="clear-btn" onclick="resetForm()">Сбросить</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

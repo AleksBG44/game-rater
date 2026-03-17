@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Игры</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="site.js" defer></script>
+</head>
+<body>
+  <div class="app-layout">
+
+    <aside class="sidebar">
+      <div class="sidebar-logo">Рейтинатор 1.0 🎮</div>
+
+      <button class="sidebar-btn" onclick="window.location.href='index.html'">
+        Оценка
+      </button>
+
+      <button class="sidebar-btn active" onclick="window.location.href='games.html'">
+        Игры
+      </button>
+    </aside>
+
+    <main class="main-content">
+      <section id="gamesSection" class="content-section">
+        <div class="app-shell">
+          <div class="panel">
+            <h2 class="games-title">Сохранённые игры</h2>
+            <div class="list" id="gameList"></div>
+
+            <div class="actions-games">
+              <button class="danger-btn" onclick="clearAllGames()">Очистить всё</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+  </div>
+</body>
+</html>
