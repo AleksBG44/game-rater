@@ -526,3 +526,92 @@
     font-size: 16px;
     color: rgba(255,255,255,0.65);
     }
+
+    .game-search-field {
+    position: relative;
+  }
+
+  .game-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    width: 100%;
+    background: rgba(12, 18, 34, 0.98);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    box-shadow: 0 14px 40px rgba(0,0,0,0.35);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    overflow: hidden;
+    display: none;
+    max-height: 320px;
+    overflow-y: auto;
+  }
+
+  .game-option {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: 0.15s ease;
+  }
+
+  .game-option:hover {
+    background: rgba(255,255,255,0.06);
+  }
+
+  .game-option img {
+    width: 52px;
+    height: 52px;
+    object-fit: cover;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.05);
+  }
+
+  .game-option-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+  }
+
+  .game-option-subtitle {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 2px;
+  }
+
+  .cover.has-image {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: transparent;
+  }
+
+  .saved-cover {
+    width: 20%;
+    height: 300px;
+    border-radius: 16px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-bottom: 14px;
+  }
+
+  .rawg-credit {
+    margin-top: 69vh;
+    text-align: center;
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .rawg-credit a {
+    color: #8c7bff;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .rawg-credit a:hover {
+    text-decoration: underline;
+  }

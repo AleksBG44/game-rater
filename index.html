@@ -20,6 +20,12 @@
       <button class="sidebar-btn" onclick="window.location.href='games.html'">
         Игры
       </button>
+
+      
+      <div class="rawg-credit">
+        Данные об играх предоставлены 
+        <a href="https://rawg.io/" target="_blank">RAWG.io</a>
+      </div>
     </aside>
 
     <main class="main-content">
@@ -30,9 +36,10 @@
               <div class="cover">🎮</div>
 
               <div class="track-info">
-                <div class="field">
+                <div class="field game-search-field">
                   <label for="gameName">Название игры</label>
-                  <input type="text" id="gameName">
+                  <input type="text" id="gameName" autocomplete="off">
+                  <div id="gameDropdown" class="gameDropdown"></div>
                 </div>
 
                 <div class="field">
@@ -135,5 +142,6 @@
       </section>
     </main>
   </div>
+
 </body>
 </html>
