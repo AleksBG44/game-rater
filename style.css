@@ -405,6 +405,7 @@
     .list {
       display: grid;
       gap: 14px;
+      padding-top: 20px;
     }
 
     .saved-card {
@@ -614,4 +615,58 @@
 
   .rawg-credit a:hover {
     text-decoration: underline;
+  }
+  .games-toolbar {
+  margin-bottom: 18px;
+  }
+
+    .search-box {
+    position: relative;
+  }
+
+  .search-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 18px;
+    height: 18px;
+
+    stroke: rgba(255,255,255,0.6);
+    stroke-width: 2;
+    fill: none;
+
+    pointer-events: none;
+  }
+
+  .games-search {
+    width: 100%;
+    padding: 14px 16px 14px;
+    
+
+    border-radius: 14px;
+    border: none;
+    outline: none;
+
+    background: rgba(0,0,0,0.35);
+    color: white;
+    font-size: 15px;
+
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.04) inset;
+  }
+
+  .games-search::placeholder {
+    color: rgba(255,255,255,0.35);
+  }
+
+  .no-results {
+    text-align: center;
+    color: rgba(255,255,255,0.45);
+    padding: 20px 0 10px;
+  }
+  .games-search:focus {
+  box-shadow:
+    0 0 0 1px rgba(140, 120, 255, 0.6),
+    0 0 20px rgba(140, 120, 255, 0.2);
   }

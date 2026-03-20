@@ -46,52 +46,73 @@
   }
 
   // рендер игр на страничке
-  function renderGames() {
-    const gameList = document.getElementById("gameList") || document.getElementById("gamesList");
-    if (!gameList) return;
+ function renderGames() {
+  const gameList = document.getElementById("gameList") || document.getElementById("gamesList");
+  if (!gameList) return;
 
-    gameList.innerHTML = "";
+  const searchInput = document.getElementById("gamesSearch");
+  const searchValue = searchInput ? searchInput.value.trim().toLowerCase() : "";
 
-    if (games.length === 0) {
-      gameList.innerHTML = "<p>Пока нет сохранённых игр.</p>";
-      return;
-    }
+  gameList.innerHTML = "";
 
-    [...games].reverse().forEach((game, reverseIndex) => {
-      const realIndex = games.length - 1 - reverseIndex;
+  if (games.length === 0) {
+    gameList.innerHTML = "<p>Пока нет сохранённых игр.</p>";
+    return;
+  }
 
-      const card = document.createElement("div");
-      card.className = "saved-card";
+  const filteredGames = [...games].filter((game) => {
+    const name = (game.name || "").toLowerCase();
+    const studio = (game.studio || "").toLowerCase();
+    const comment = (game.comment || "").toLowerCase();
 
-      card.innerHTML = `
+    return (
+      name.includes(searchValue) ||
+      studio.includes(searchValue) ||
+      comment.includes(searchValue)
+    );
+  });
+
+  if (filteredGames.length === 0) {
+    gameList.innerHTML = `<div class="no-results">Ничего не найдено.</div>`;
+    return;
+  }
+
+  [...filteredGames].reverse().forEach((game) => {
+    const realIndex = games.findIndex((g) => g === game);
+
+    const card = document.createElement("div");
+    card.className = "saved-card";
+
+    card.innerHTML = `
       ${game.coverImage ? `<div class="saved-cover" style="background-image: url('${game.coverImage}');"></div>` : ""}
+
       <div class="saved-card-top">
-          <div>
+        <div>
           <h4>${game.name}</h4>
           <div class="saved-meta">${game.studio || "Без студии"}</div>
-          </div>
-          <div class="saved-score">${game.total}/90</div>
+        </div>
+        <div class="saved-score">${game.total}/90</div>
       </div>
 
       <div class="saved-stats">
-          <span>Графика: ${game.graphics}</span>
-          <span>Геймплей: ${game.gameplay}</span>
-          <span>Сюжет: ${game.story}</span>
-          <span>Визуал: ${game.visual}</span>
-          <span>Вайб: ${game.vibe}</span>
-          <span>Играбельность: ${game.replay}</span>
+        <span>Графика: ${game.graphics}</span>
+        <span>Геймплей: ${game.gameplay}</span>
+        <span>Сюжет: ${game.story}</span>
+        <span>Визуал: ${game.visual}</span>
+        <span>Вайб: ${game.vibe}</span>
+        <span>Играбельность: ${game.replay}</span>
       </div>
 
       <div class="saved-comment">${game.comment || "Без комментария"}</div>
 
       <div class="saved-actions">
-          <button class="danger-btn" onclick="deleteGame(${realIndex})">Удалить</button>
+        <button class="danger-btn" onclick="deleteGame(${realIndex})">Удалить</button>
       </div>
-      `;
+    `;
 
-      gameList.appendChild(card);
-    });
-  }
+    gameList.appendChild(card);
+  });
+}
 
   // кнопка добавить, очистить, удалить
   function addGame() {
@@ -357,6 +378,11 @@
     updateTotal();
     renderGames();
   });
+
+  const gamesSearch = document.getElementById("gamesSearch");
+  if (gamesSearch) {
+    gamesSearch.addEventListener("input", renderGames);
+  }
 
   window.addGame = addGame;
   window.clearAllGames = clearAllGames;
