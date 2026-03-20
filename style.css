@@ -130,7 +130,7 @@
       display: grid;
       grid-template-columns: 120px 1fr;
       gap: 18px;
-      align-items: stretch;
+      align-items: start;
       margin-bottom: 22px;
     }
 
@@ -139,9 +139,10 @@
       background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
       display: flex;
       align-items: center;
+      align-self: start;
       justify-content: center;
       font-size: 52px;
-      min-height: 120px;
+      min-height: 245px;
       min-width: 200px;
       box-shadow: 0 0 0 1px rgba(255,255,255,0.04) inset;
     }

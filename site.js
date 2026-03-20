@@ -405,6 +405,15 @@
 
       clearTimeout(searchTimeout);
 
+      if (query.length == 0) {
+        selectedCoverUrl = "";
+        document.getElementById("gameStudio").value = "";
+        setCoverImage("");
+        hideDropdown();
+        return;
+      }
+
+
       if (query.length < 2) {
         hideDropdown();
         return;
