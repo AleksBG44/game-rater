@@ -486,7 +486,7 @@
 
   // init
   document.addEventListener("DOMContentLoaded", function () {
-    setupSlider("music", "musicValue", "miniMuisc");
+    setupSlider("music", "musicValue", "miniMusic");
     setupSlider("gameplay", "gameplayValue", "miniGameplay");
     setupSlider("story", "storyValue", "miniStory");
     setupSlider("visual", "visualValue", "miniVisual");
