@@ -1,8 +1,6 @@
 (async () => {
-  // api info
-  const RAWG_API_KEY = "4d31007b922d47a1ac928bf15108b52d";
   let searchTimeout = null;
-  let selectedRawgGameId = null;
+  let selectedGameId = null;
   let selectedCoverUrl = "";
   let currentSort = "rating-desc";
 
@@ -217,7 +215,7 @@
       replay,
       total,
       coverImage,
-      rawgId: selectedRawgGameId
+      gameId: selectedGameId
     };
 
     games.push(game);
@@ -269,7 +267,7 @@
     document.getElementById("miniVibe").textContent = 3;
     document.getElementById("miniReplay").textContent = 3;
 
-    selectedRawgGameId = null;
+    selectedGameId = null;
     selectedCoverUrl = "";
 
     setCoverImage("");
@@ -281,40 +279,18 @@
     }
   }
 
-  // api search функционалл
-  async function searchGamesRAWG(query) {
-    const url = `https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(query)}&page_size=5`;
-
-    const response = await fetch(url);
+  // IGDB API
+  async function searchGamesIGDB(query) {
+    const response = await fetch(`/api/v1/search?q=${encodeURIComponent(query)}`);
     if (!response.ok) {
       throw new Error("Ошибка при поиске игр");
-    }
-
-    const data = await response.json();
-    return data.results || [];
-  }
-
-  async function fetchGameDetailsRAWG(gameId) {
-    const url = `https://api.rawg.io/api/games/${gameId}?key=${RAWG_API_KEY}`;
-
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("Ошибка при получении данных игры");
     }
 
     return await response.json();
   }
 
-  function getStudioName(gameDetails) {
-    if (gameDetails.developers && gameDetails.developers.length > 0) {
-      return gameDetails.developers.map(dev => dev.name).join(", ");
-    }
-
-    if (gameDetails.publishers && gameDetails.publishers.length > 0) {
-      return gameDetails.publishers.map(pub => pub.name).join(", ");
-    }
-
-    return "";
+  function getIGDBImage(imageId) {
+    return `https://images.igdb.com/igdb/image/upload/t_cover_big/${imageId}.jpg`;
   }
 
   function setCoverImage(imageUrl) {
@@ -354,36 +330,31 @@
       const option = document.createElement("div");
       option.className = "game-option";
 
-      const releasedText = game.released ? `Релиз: ${game.released}` : "Дата неизвестна";
-      const image = game.background_image || "";
+      const image = game.cover?.image_id ? getIGDBImage(game.cover.image_id) : "";
+      const studio =
+        game.involved_companies?.[0]?.company?.name ||
+        "";
 
       option.innerHTML = `
-        <img src="${image}" alt="${game.name}">
+        ${image ? `<img src="${image}" alt="${game.name}">` : `<div class="dropdown-no-image">🎮</div>`}
         <div>
           <div class="game-option-title">${game.name}</div>
-          <div class="game-option-subtitle">${releasedText}</div>
+          <div class="game-option-subtitle">${studio || "Студия неизвестна"}</div>
         </div>
       `;
 
-      option.addEventListener("click", async () => {
-        try {
-          const details = await fetchGameDetailsRAWG(game.id);
+      option.addEventListener("click", () => {
+        selectedGameId = game.id;
 
-          selectedRawgGameId = details.id;
+        const gameNameInput = document.getElementById("gameName");
+        const studioInput = document.getElementById("gameStudio");
 
-          const gameNameInput = document.getElementById("gameName");
-          const studioInput = document.getElementById("gameStudio");
+        if (gameNameInput) gameNameInput.value = game.name || "";
+        if (studioInput) studioInput.value = studio;
 
-          if (gameNameInput) gameNameInput.value = details.name || "";
-          if (studioInput) studioInput.value = getStudioName(details);
-
-          selectedCoverUrl = details.background_image || game.background_image || "";
-          setCoverImage(selectedCoverUrl);
-          hideDropdown();
-        } catch (error) {
-          console.error(error);
-          hideDropdown();
-        }
+        selectedCoverUrl = image;
+        setCoverImage(selectedCoverUrl);
+        hideDropdown();
       });
 
       dropdown.appendChild(option);
@@ -392,7 +363,7 @@
     dropdown.style.display = "block";
   }
 
-  function initRawgAutocomplete() {
+  function initAutocomplete() {
     const gameNameInput = document.getElementById("gameName");
     const dropdown = document.getElementById("gameDropdown");
 
@@ -401,18 +372,16 @@
     gameNameInput.addEventListener("input", () => {
       const query = gameNameInput.value.trim();
 
-      selectedRawgGameId = null;
-
+      selectedGameId = null;
       clearTimeout(searchTimeout);
 
-      if (query.length == 0) {
+      if (query.length === 0) {
         selectedCoverUrl = "";
         document.getElementById("gameStudio").value = "";
         setCoverImage("");
         hideDropdown();
         return;
       }
-
 
       if (query.length < 2) {
         hideDropdown();
@@ -421,7 +390,7 @@
 
       searchTimeout = setTimeout(async () => {
         try {
-          const games = await searchGamesRAWG(query);
+          const games = await searchGamesIGDB(query);
           renderDropdown(games);
         } catch (error) {
           console.error(error);
@@ -483,7 +452,7 @@
     setupSlider("vibe", "vibeValue", "miniVibe");
     setupSlider("replay", "replayValue", "miniReplay");
 
-    initRawgAutocomplete();
+    initAutocomplete();
     initSorting();
     updateTotal();
     renderGames();
