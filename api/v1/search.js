@@ -18,9 +18,14 @@ export default async function handler(req, res) {
       "Authorization": `Bearer ${access_token}`,
     },
     body: `
-      search "${q}";
-      fields name, cover.image_id, involved_companies.company.name;
-      limit 5;
+        search "${q}";
+        fields
+            name,
+            cover.image_id,
+            involved_companies.developer,
+            involved_companies.publisher,
+            involved_companies.company.name;
+        limit 5;
     `
   });
 

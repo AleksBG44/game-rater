@@ -289,6 +289,34 @@
     return await response.json();
   }
 
+  function getStudioName(game) {
+    if (!game.involved_companies || !game.involved_companies.length) {
+      return "";
+    }
+
+    const developer = game.involved_companies.find(
+      (item) => item.developer && item.company?.name
+    );
+
+    if (developer) {
+      return developer.company.name;
+    }
+
+    const publisher = game.involved_companies.find(
+      (item) => item.publisher && item.company?.name
+    );
+
+    if (publisher) {
+      return publisher.company.name;
+    }
+
+    const firstCompany = game.involved_companies.find(
+      (item) => item.company?.name
+    );
+
+    return firstCompany ? firstCompany.company.name : "";
+  }
+
   function getIGDBImage(imageId) {
     return `https://images.igdb.com/igdb/image/upload/t_cover_big_2x/${imageId}.jpg`;
   }
@@ -344,14 +372,25 @@
       ? getIGDBImage(game.cover.image_id)
       : "";
 
+    const studio = getStudioName(game);
+
     option.innerHTML = `
-      ${image ? `<img src="${image}">` : `<div>🎮</div>`}
-      <div>${game.name}</div>
+      ${image ? `<img src="${image}" alt="${game.name}">` : `<div class="dropdown-no-image">🎮</div>`}
+      <div>
+        <div class="game-option-title">${game.name}</div>
+        <div class="game-option-subtitle">${studio || "Студия неизвестна"}</div>
+      </div>
     `;
 
     option.onclick = () => {
       selectedGameId = game.id;
-      document.getElementById("gameName").value = game.name;
+
+      const gameNameInput = document.getElementById("gameName");
+      const studioInput = document.getElementById("gameStudio");
+
+      if (gameNameInput) gameNameInput.value = game.name || "";
+      if (studioInput) studioInput.value = studio || "";
+
       selectedCoverUrl = image;
       setCoverImage(image);
       hideDropdown();
@@ -376,7 +415,8 @@
 
     if (query.length === 0) {
       selectedCoverUrl = "";
-      document.getElementById("gameStudio").value = "";
+      const studioInput = document.getElementById("gameStudio");
+      if (studioInput) studioInput.value = "";
       setCoverImage("");
       hideDropdown();
       return;
@@ -400,8 +440,18 @@
     }, 300);
   });
 
+  window.addEventListener("scroll", () => positionDropdown(input));
+  window.addEventListener("resize", () => positionDropdown(input));
+
+  document.addEventListener("click", (event) => {
+    if (!dropdown.contains(event.target) && event.target !== input) {
+      hideDropdown();
+    }
+  });
+}
+
     document.addEventListener("click", (event) => {
-      if (!dropdown.contains(event.target) && event.target !== gameNameInput) {
+      if (!dropdown.contains(event.target) && event.target !== input) {
         hideDropdown();
       }
     });
