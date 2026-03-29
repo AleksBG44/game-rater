@@ -33,14 +33,14 @@
     const totalScore = document.getElementById("totalScore");
     if (!totalScore) return;
 
-    const graphics = Number(document.getElementById("graphics")?.value || 0);
+    const music = Number(document.getElementById("music")?.value || 0);
     const gameplay = Number(document.getElementById("gameplay")?.value || 0);
     const story = Number(document.getElementById("story")?.value || 0);
     const visual = Number(document.getElementById("visual")?.value || 0);
     const vibe = Number(document.getElementById("vibe")?.value || 0);
     const replay = Number(document.getElementById("replay")?.value || 0);
 
-    const total = Math.round(((graphics + gameplay + story + visual + vibe + replay) / 50) * 90);
+    const total = Math.round(((music + gameplay + story + visual + vibe + replay) / 50) * 90);
     const style = getScoreStyle(total);
 
     totalScore.textContent = total;
@@ -158,7 +158,7 @@
         </div>
 
         <div class="saved-stats">
-          <span>Графика: ${game.graphics}</span>
+          <span>Музыка: ${game.music}</span>
           <span>Геймплей: ${game.gameplay}</span>
           <span>Сюжет: ${game.story}</span>
           <span>Визуал: ${game.visual}</span>
@@ -186,14 +186,14 @@
     const studio = document.getElementById("gameStudio")?.value.trim() || "";
     const comment = document.getElementById("gameComment")?.value.trim() || "";
 
-    const graphics = Number(document.getElementById("graphics")?.value || 0);
+    const music = Number(document.getElementById("music")?.value || 0);
     const gameplay = Number(document.getElementById("gameplay")?.value || 0);
     const story = Number(document.getElementById("story")?.value || 0);
     const visual = Number(document.getElementById("visual")?.value || 0);
     const vibe = Number(document.getElementById("vibe")?.value || 0);
     const replay = Number(document.getElementById("replay")?.value || 0);
 
-    const total = Math.round(((graphics + gameplay + story + visual + vibe + replay) / 50) * 90);
+    const total = Math.round(((music + gameplay + story + visual + vibe + replay) / 50) * 90);
     const coverImage = selectedCoverUrl;
 
     if (!name) {
@@ -205,7 +205,7 @@
       name,
       studio,
       comment,
-      graphics,
+      music,
       gameplay,
       story,
       visual,
@@ -244,21 +244,21 @@
     document.getElementById("gameStudio").value = "";
     document.getElementById("gameComment").value = "";
 
-    document.getElementById("graphics").value = 5;
+    document.getElementById("music").value = 5;
     document.getElementById("gameplay").value = 5;
     document.getElementById("story").value = 5;
     document.getElementById("visual").value = 5;
     document.getElementById("vibe").value = 3;
     document.getElementById("replay").value = 3;
 
-    document.getElementById("graphicsValue").textContent = 5;
+    document.getElementById("musicValue").textContent = 5;
     document.getElementById("gameplayValue").textContent = 5;
     document.getElementById("storyValue").textContent = 5;
     document.getElementById("visualValue").textContent = 5;
     document.getElementById("vibeValue").textContent = 3;
     document.getElementById("replayValue").textContent = 3;
 
-    document.getElementById("miniGraphics").textContent = 5;
+    document.getElementById("miniMusic").textContent = 5;
     document.getElementById("miniGameplay").textContent = 5;
     document.getElementById("miniStory").textContent = 5;
     document.getElementById("miniVisual").textContent = 5;
@@ -486,7 +486,7 @@
 
   // init
   document.addEventListener("DOMContentLoaded", function () {
-    setupSlider("graphics", "graphicsValue", "miniGraphics");
+    setupSlider("music", "musicValue", "miniMuisc");
     setupSlider("gameplay", "gameplayValue", "miniGameplay");
     setupSlider("story", "storyValue", "miniStory");
     setupSlider("visual", "visualValue", "miniVisual");
