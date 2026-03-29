@@ -6,12 +6,12 @@
 
   let games = JSON.parse(localStorage.getItem("gamesFancy")) || [];
 
-  // local storage - сохран игр
+  // local storage - сохранение игр
   function saveGames() {
     localStorage.setItem("gamesFancy", JSON.stringify(games));
   }
 
-  // слайдеры + подсчёт
+  // слайдеры + тотал
   function setupSlider(sliderId, valueId, miniId) {
     const slider = document.getElementById(sliderId);
     const valueText = document.getElementById(valueId);
@@ -48,7 +48,6 @@
     totalScore.style.textShadow = style.shadow;
   }
 
-  // Цвет Оценок
   function getScoreStyle(score) {
     if (score <= 30) {
       return {
@@ -104,7 +103,7 @@
     return sorted;
   }
 
-  // рендер игр на страничке
+  // рендер игр
   function renderGames() {
     const gameList = document.getElementById("gameList") || document.getElementById("gamesList");
     if (!gameList) return;
@@ -140,7 +139,6 @@
 
     finalGames.forEach((game) => {
       const realIndex = games.findIndex((g) => g === game);
-
       const card = document.createElement("div");
       card.className = "saved-card";
 
@@ -179,7 +177,7 @@
     });
   }
 
-  // кнопка добавить, очистить, удалить
+  // add, delete, clear
   function addGame() {
     const nameInput = document.getElementById("gameName");
     if (!nameInput) return;
@@ -237,7 +235,7 @@
     renderGames();
   }
 
-  // ресет всего
+  // ресет
   function resetForm(showAlert = false) {
     const gameName = document.getElementById("gameName");
     if (!gameName) return;
@@ -289,6 +287,10 @@
     return await response.json();
   }
 
+  function getIGDBImage(imageId) {
+    return `https://images.igdb.com/igdb/image/upload/t_cover_big_2x/${imageId}.jpg`;
+  }
+
   function getStudioName(game) {
     if (!game.involved_companies || !game.involved_companies.length) {
       return "";
@@ -317,10 +319,6 @@
     return firstCompany ? firstCompany.company.name : "";
   }
 
-  function getIGDBImage(imageId) {
-    return `https://images.igdb.com/igdb/image/upload/t_cover_big_2x/${imageId}.jpg`;
-  }
-
   function setCoverImage(imageUrl) {
     const cover = document.querySelector(".cover");
     if (!cover) return;
@@ -336,119 +334,111 @@
     }
   }
 
+  //  dropdown
   const dropdown = document.createElement("div");
   dropdown.id = "gameDropdown";
   dropdown.className = "game-dropdown";
   document.body.appendChild(dropdown);
 
   function hideDropdown() {
-    const dropdown = document.getElementById("gameDropdown");
-    if (!dropdown) return;
     dropdown.style.display = "none";
     dropdown.innerHTML = "";
   }
 
   function positionDropdown(input) {
-  const rect = input.getBoundingClientRect();
-
-  dropdown.style.top = rect.bottom + window.scrollY + 8 + "px";
-  dropdown.style.left = rect.left + window.scrollX + "px";
-  dropdown.style.width = rect.width + "px";
-}
-
-  function renderDropdown(games) {
-  dropdown.innerHTML = "";
-
-  if (!games.length) {
-    hideDropdown();
-    return;
+    const rect = input.getBoundingClientRect();
+    dropdown.style.top = rect.bottom + window.scrollY + 8 + "px";
+    dropdown.style.left = rect.left + window.scrollX + "px";
+    dropdown.style.width = rect.width + "px";
   }
 
-  games.forEach(game => {
-    const option = document.createElement("div");
-    option.className = "game-option";
+  function renderDropdown(games) {
+    dropdown.innerHTML = "";
 
-    const image = game.cover?.image_id
-      ? getIGDBImage(game.cover.image_id)
-      : "";
-
-    const studio = getStudioName(game);
-
-    option.innerHTML = `
-      ${image ? `<img src="${image}" alt="${game.name}">` : `<div class="dropdown-no-image">🎮</div>`}
-      <div>
-        <div class="game-option-title">${game.name}</div>
-        <div class="game-option-subtitle">${studio || "Студия неизвестна"}</div>
-      </div>
-    `;
-
-    option.onclick = () => {
-      selectedGameId = game.id;
-
-      const gameNameInput = document.getElementById("gameName");
-      const studioInput = document.getElementById("gameStudio");
-
-      if (gameNameInput) gameNameInput.value = game.name || "";
-      if (studioInput) studioInput.value = studio || "";
-
-      selectedCoverUrl = image;
-      setCoverImage(image);
+    if (!games.length) {
       hideDropdown();
-    };
+      return;
+    }
 
-    dropdown.appendChild(option);
-  });
+    games.forEach((game) => {
+      const option = document.createElement("div");
+      option.className = "game-option";
 
-  dropdown.style.display = "block";
-}
+      const image = game.cover?.image_id
+        ? getIGDBImage(game.cover.image_id)
+        : "";
+
+      const studio = getStudioName(game);
+
+      option.innerHTML = `
+        ${image
+          ? `<img src="${image}" alt="${game.name}">`
+          : `<div class="dropdown-no-image">🎮</div>`}
+        <div>
+          <div class="game-option-title">${game.name}</div>
+          <div class="game-option-subtitle">${studio || "Студия неизвестна"}</div>
+        </div>
+      `;
+
+      option.onclick = () => {
+        selectedGameId = game.id;
+
+        const gameNameInput = document.getElementById("gameName");
+        const studioInput = document.getElementById("gameStudio");
+
+        if (gameNameInput) gameNameInput.value = game.name || "";
+        if (studioInput) studioInput.value = studio || "";
+
+        selectedCoverUrl = image;
+        setCoverImage(image);
+        hideDropdown();
+      };
+
+      dropdown.appendChild(option);
+    });
+
+    dropdown.style.display = "block";
+  }
 
   function initAutocomplete() {
-  const input = document.getElementById("gameName");
+    const input = document.getElementById("gameName");
+    if (!input) return;
 
-  if (!input) return;
+    input.addEventListener("input", () => {
+      const query = input.value.trim();
 
-  input.addEventListener("input", () => {
-    const query = input.value.trim();
+      selectedGameId = null;
+      clearTimeout(searchTimeout);
 
-    selectedGameId = null;
-    clearTimeout(searchTimeout);
-
-    if (query.length === 0) {
-      selectedCoverUrl = "";
-      const studioInput = document.getElementById("gameStudio");
-      if (studioInput) studioInput.value = "";
-      setCoverImage("");
-      hideDropdown();
-      return;
-    }
-
-    if (query.length < 2) {
-      hideDropdown();
-      return;
-    }
-
-    positionDropdown(input);
-
-    searchTimeout = setTimeout(async () => {
-      try {
-        const games = await searchGamesIGDB(query);
-        renderDropdown(games);
-      } catch (error) {
-        console.error(error);
+      if (query.length === 0) {
+        selectedCoverUrl = "";
+        const studioInput = document.getElementById("gameStudio");
+        if (studioInput) studioInput.value = "";
+        setCoverImage("");
         hideDropdown();
+        return;
       }
-    }, 300);
-  });
 
-  window.addEventListener("scroll", () => positionDropdown(input));
-  window.addEventListener("resize", () => positionDropdown(input));
+      if (query.length < 2) {
+        hideDropdown();
+        return;
+      }
 
-  document.addEventListener("click", (event) => {
-    if (!dropdown.contains(event.target) && event.target !== input) {
-      hideDropdown();
-    }
-  });
-}
+      positionDropdown(input);
+
+      searchTimeout = setTimeout(async () => {
+        try {
+          const games = await searchGamesIGDB(query);
+          renderDropdown(games);
+        } catch (error) {
+          console.error(error);
+          hideDropdown();
+        }
+      }, 300);
+    });
+
+    window.addEventListener("scroll", () => positionDropdown(input));
+    window.addEventListener("resize", () => positionDropdown(input));
 
     document.addEventListener("click", (event) => {
       if (!dropdown.contains(event.target) && event.target !== input) {
