@@ -290,7 +290,7 @@
   }
 
   function getIGDBImage(imageId) {
-    return `https://images.igdb.com/igdb/image/upload/t_cover_big/${imageId}.jpg`;
+    return `https://images.igdb.com/igdb/image/upload/t_cover_big_2x/${imageId}.jpg`;
   }
 
   function setCoverImage(imageUrl) {
