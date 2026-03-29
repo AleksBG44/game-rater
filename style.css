@@ -132,6 +132,7 @@
       gap: 18px;
       align-items: start;
       margin-bottom: 22px;
+      overflow: visible;
     }
 
     .cover {
@@ -150,6 +151,7 @@
     .track-info {
       display: grid;
       gap: 10px;
+      overflow: visible;
     }
 
     .field {
@@ -531,23 +533,20 @@
 
     .game-search-field {
     position: relative;
+    overflow: visible;
   }
 
   .game-dropdown {
-    position: absolute;
-    top: calc(100% + 6px);
-    left: 0;
-    width: 100%;
-    background: rgba(12, 18, 34, 0.98);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 14px;
-    box-shadow: 0 14px 40px rgba(0,0,0,0.35);
-    backdrop-filter: blur(10px);
-    z-index: 1000;
-    overflow: hidden;
-    display: none;
-    max-height: 320px;
-    overflow-y: auto;
+  position: absolute;
+  z-index: 99999;
+
+  display: none;
+  max-height: 320px;
+  overflow-y: auto;
+
+  background: rgba(12, 18, 34, 0.98);
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
   }
 
   .game-option {

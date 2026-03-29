@@ -308,6 +308,11 @@
     }
   }
 
+  const dropdown = document.createElement("div");
+  dropdown.id = "gameDropdown";
+  dropdown.className = "game-dropdown";
+  document.body.appendChild(dropdown);
+
   function hideDropdown() {
     const dropdown = document.getElementById("gameDropdown");
     if (!dropdown) return;
@@ -315,89 +320,85 @@
     dropdown.innerHTML = "";
   }
 
+  function positionDropdown(input) {
+  const rect = input.getBoundingClientRect();
+
+  dropdown.style.top = rect.bottom + window.scrollY + 8 + "px";
+  dropdown.style.left = rect.left + window.scrollX + "px";
+  dropdown.style.width = rect.width + "px";
+}
+
   function renderDropdown(games) {
-    const dropdown = document.getElementById("gameDropdown");
-    if (!dropdown) return;
+  dropdown.innerHTML = "";
 
-    dropdown.innerHTML = "";
+  if (!games.length) {
+    hideDropdown();
+    return;
+  }
 
-    if (!games.length) {
+  games.forEach(game => {
+    const option = document.createElement("div");
+    option.className = "game-option";
+
+    const image = game.cover?.image_id
+      ? getIGDBImage(game.cover.image_id)
+      : "";
+
+    option.innerHTML = `
+      ${image ? `<img src="${image}">` : `<div>🎮</div>`}
+      <div>${game.name}</div>
+    `;
+
+    option.onclick = () => {
+      selectedGameId = game.id;
+      document.getElementById("gameName").value = game.name;
+      selectedCoverUrl = image;
+      setCoverImage(image);
+      hideDropdown();
+    };
+
+    dropdown.appendChild(option);
+  });
+
+  dropdown.style.display = "block";
+}
+
+  function initAutocomplete() {
+  const input = document.getElementById("gameName");
+
+  if (!input) return;
+
+  input.addEventListener("input", () => {
+    const query = input.value.trim();
+
+    selectedGameId = null;
+    clearTimeout(searchTimeout);
+
+    if (query.length === 0) {
+      selectedCoverUrl = "";
+      document.getElementById("gameStudio").value = "";
+      setCoverImage("");
       hideDropdown();
       return;
     }
 
-    games.forEach(game => {
-      const option = document.createElement("div");
-      option.className = "game-option";
+    if (query.length < 2) {
+      hideDropdown();
+      return;
+    }
 
-      const image = game.cover?.image_id ? getIGDBImage(game.cover.image_id) : "";
-      const studio =
-        game.involved_companies?.[0]?.company?.name ||
-        "";
+    positionDropdown(input);
 
-      option.innerHTML = `
-        ${image ? `<img src="${image}" alt="${game.name}">` : `<div class="dropdown-no-image">🎮</div>`}
-        <div>
-          <div class="game-option-title">${game.name}</div>
-          <div class="game-option-subtitle">${studio || "Студия неизвестна"}</div>
-        </div>
-      `;
-
-      option.addEventListener("click", () => {
-        selectedGameId = game.id;
-
-        const gameNameInput = document.getElementById("gameName");
-        const studioInput = document.getElementById("gameStudio");
-
-        if (gameNameInput) gameNameInput.value = game.name || "";
-        if (studioInput) studioInput.value = studio;
-
-        selectedCoverUrl = image;
-        setCoverImage(selectedCoverUrl);
+    searchTimeout = setTimeout(async () => {
+      try {
+        const games = await searchGamesIGDB(query);
+        renderDropdown(games);
+      } catch (error) {
+        console.error(error);
         hideDropdown();
-      });
-
-      dropdown.appendChild(option);
-    });
-
-    dropdown.style.display = "block";
-  }
-
-  function initAutocomplete() {
-    const gameNameInput = document.getElementById("gameName");
-    const dropdown = document.getElementById("gameDropdown");
-
-    if (!gameNameInput || !dropdown) return;
-
-    gameNameInput.addEventListener("input", () => {
-      const query = gameNameInput.value.trim();
-
-      selectedGameId = null;
-      clearTimeout(searchTimeout);
-
-      if (query.length === 0) {
-        selectedCoverUrl = "";
-        document.getElementById("gameStudio").value = "";
-        setCoverImage("");
-        hideDropdown();
-        return;
       }
-
-      if (query.length < 2) {
-        hideDropdown();
-        return;
-      }
-
-      searchTimeout = setTimeout(async () => {
-        try {
-          const games = await searchGamesIGDB(query);
-          renderDropdown(games);
-        } catch (error) {
-          console.error(error);
-          hideDropdown();
-        }
-      }, 300);
-    });
+    }, 300);
+  });
 
     document.addEventListener("click", (event) => {
       if (!dropdown.contains(event.target) && event.target !== gameNameInput) {
