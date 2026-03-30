@@ -25,7 +25,6 @@ export default async function handler(req, res) {
             involved_companies.developer,
             involved_companies.publisher,
             involved_companies.company.name;
-        sort total_rating desc;
         limit 15;
     `
   });
