@@ -312,25 +312,25 @@
       cursor: pointer;
     }
 
-    input.blue::-moz-range-track {
+  input.pink::-moz-range-track {
     height: 10px;
     border-radius: 999px;
     background: rgba(255,255,255,0.10);
     }
 
-    input.blue::-moz-range-progress {
-      height: 10px;
-      border-radius: 999px;
-      background: #5c7cff;
+    input.pink::-moz-range-progress {
+    height: 10px;
+    border-radius: 999px;
+    background: #ff2f87;
     }
 
-    input.blue::-moz-range-thumb {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.8);
-      background: #d9d9d9;
-      cursor: pointer;
+    input.pink::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.8);
+    background: #d9d9d9;
+    cursor: pointer;
     }
 
     input.violet::-moz-range-track {
